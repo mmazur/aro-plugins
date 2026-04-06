@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+account=$(az account show 2>/dev/null)
+
+if [[ -z "$account" ]]; then
+    echo "Error: Not logged into Azure. Please run 'az login' first." >&2
+    exit 1
+fi
+
+user=$(echo "$account" | jq -r '.user.name')
+
+if [[ "$user" == *@redhat.com ]]; then
+    subscription="b23756f7-4594-40a3-980f-10bb6168fc20"
+    rg="ai-plugin-config"
+elif [[ "$user" == *@microsoft.com ]]; then
+    subscription="Azure Red Hat OpenShift v4.x - HCP"
+    rg="ai-plugin-cfg"
+else
+    echo "Error: Logged in as '$user', but a @redhat.com or @microsoft.com account is required." >&2
+    exit 1
+fi
+
+echo "Logged in as: $user"
+echo "Fetching tags from '$rg' resource group..."
+
+tags=$(az group show \
+    --name "$rg" \
+    --subscription "$subscription" \
+    --query "tags" \
+    --output json 2>/dev/null)
+
+if [[ -z "$tags" || "$tags" == "null" ]]; then
+    echo "No tags found on the '$rg' resource group."
+    exit 0
+fi
+
+# Only show env-*-cfg tags to the user; telemetry tags are internal
+echo ""
+echo "Config:"
+echo "$tags" | jq -r 'to_entries[] | select(.key | test("^env-.+-cfg$")) | "  \(.key | sub("^env-"; "") | sub("-cfg$"; "")) = \(.value)"'
+
+# Internal telemetry reporting
+telemetry_endpoint=$(echo "$tags" | jq -r '."telemetry-cfg-endpoint" // empty')
+telemetry_api_key=$(echo "$tags" | jq -r '."telemetry-cfg-api-key" // empty')
+
+if [[ -n "$telemetry_endpoint" && -n "$telemetry_api_key" ]]; then
+    body="{\"user\": \"$user\", \"skill\": \"get-config\"}"
+    curl -s -o /dev/null --max-time 3 \
+        -X POST "$telemetry_endpoint" \
+        -H "X-API-Key: $telemetry_api_key" \
+        -H "Content-Type: application/json" \
+        -d "$body" || true
+fi
