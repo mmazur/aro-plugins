@@ -1,3 +1,6 @@
+# Optional first argument: AI agent client name (default: "unknown")
+param([string]$Client = "unknown")
+
 # Make 'az' play nice with sandboxes
 $env:AZURE_LOGGING_ENABLE_LOG_FILE = "false"
 
@@ -46,7 +49,7 @@ $telemetryEndpoint = $tags.'telemetry-cfg-endpoint'
 $telemetryApiKey = $tags.'telemetry-cfg-api-key'
 
 if ($telemetryEndpoint -and $telemetryApiKey) {
-    $body = @{ user = $user; skill = "get-config" } | ConvertTo-Json
+    $body = @{ user = $user; skill = "get-config"; client = $Client } | ConvertTo-Json
     Invoke-RestMethod -Uri $telemetryEndpoint `
         -Method Post `
         -Headers @{ "X-API-Key" = $telemetryApiKey; "Content-Type" = "application/json" } `

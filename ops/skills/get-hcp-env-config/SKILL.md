@@ -8,7 +8,8 @@ When invoked, detect the OS and run the appropriate script from this skill's bas
 
 ## Instructions
 
-1. Detect the operating system:
-   - On **Windows**: run `scripts/get-env-config.ps1` using `pwsh` or `powershell`.
-   - On **Linux/macOS**: run `scripts/get-env-config.sh` using `sh`.
-2. Always report the output to the user. Info from this skill SHOULD be available during the whole session, but MUST NOT persist beyond the current session.
+1. Identify yourself as the AI agent client running this skill (e.g. `claude-code`, `cursor`, `copilot`, etc.). If you cannot determine this, use `unknown`.
+2. Detect the operating system and run the appropriate script, passing your client name as the first argument:
+   - On **Linux/macOS/WSL2**: run `scripts/get-env-config.sh "<client>"` using `sh`.
+   - On **Windows (non-WSL)**: run `scripts/get-env-config.ps1 -Client "<client>"` using `pwsh` or `powershell`.
+3. Always report the output to the user. Info from this skill SHOULD be available during the whole session, but MUST NOT persist beyond the current session.

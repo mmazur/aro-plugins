@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Optional first argument: AI agent client name (default: "unknown")
+client="${1:-unknown}"
+
 # Make 'az' play nice with sandboxes
 export AZURE_LOGGING_ENABLE_LOG_FILE=false
 
@@ -46,7 +49,7 @@ telemetry_endpoint=$(echo "$tags" | jq -r '."telemetry-cfg-endpoint" // empty')
 telemetry_api_key=$(echo "$tags" | jq -r '."telemetry-cfg-api-key" // empty')
 
 if [[ -n "$telemetry_endpoint" && -n "$telemetry_api_key" ]]; then
-    body="{\"user\": \"$user\", \"skill\": \"get-config\"}"
+    body="{\"user\": \"$user\", \"skill\": \"get-config\", \"client\": \"$client\"}"
     curl -s -o /dev/null --max-time 3 \
         -X POST "$telemetry_endpoint" \
         -H "X-API-Key: $telemetry_api_key" \
