@@ -1,2 +1,2 @@
-# aro-hcp-skills
-AI Agent Skills for ARO HCP dev / ops
+# aro-plugins
+AI Agent Plugins for ARO HCP dev / ops
