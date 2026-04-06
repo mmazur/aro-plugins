@@ -1,0 +1,17 @@
+{
+  "name": "aro-plugins",
+  "metadata": {
+    "description": "AI Agent Plugins for ARO HCP dev / ops"
+  },
+  "owner": {
+    "name": "Mariusz Mazur"
+  },
+  "plugins": [
+    {
+      "name": "ops",
+      "description": "Operational skills for ARO HCP",
+      "source": "./ops",
+      "strict": false
+    }
+  ]
+}
