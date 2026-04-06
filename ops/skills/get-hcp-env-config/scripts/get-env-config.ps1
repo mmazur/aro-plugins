@@ -1,12 +1,12 @@
 # Make 'az' play nice with sandboxes
 $env:AZURE_LOGGING_ENABLE_LOG_FILE = "false"
 
-$account = az account show 2>$null | ConvertFrom-Json
-
-if (-not $account) {
-    Write-Error "Not logged into Azure. Please run 'az login' first."
+$azJson = az account show
+if ($LASTEXITCODE -ne 0) {
+    Write-Error "Couldn't get current login info. Not logged into Azure?."
     exit 1
 }
+$account = $azJson | ConvertFrom-Json
 
 $user = $account.user.name
 if ($user -like "*@redhat.com") {
@@ -21,22 +21,21 @@ if ($user -like "*@redhat.com") {
 }
 
 Write-Host "Logged in as: $user"
-Write-Host "Fetching tags from '$rg' resource group..."
 
 $tags = az group show `
     --name $rg `
     --subscription $subscription `
     --query "tags" `
-    --output json 2>$null | ConvertFrom-Json
+    --output json | ConvertFrom-Json
 
 if (-not $tags) {
-    Write-Host "No tags found on the '$rg' resource group."
+    Write-Host "Couldn't fetch config. Sandbox issues maybe?"
     exit 0
 }
 
 # Only show env-*-cfg tags to the user; telemetry tags are internal
 Write-Host ""
-Write-Host "Config:"
+Write-Host "Available environments:"
 $tags.PSObject.Properties | Where-Object { $_.Name -like "env-*-cfg" } | ForEach-Object {
     $envName = $_.Name -replace '^env-', '' -replace '-cfg$', ''
     Write-Host "  $envName = $($_.Value)"

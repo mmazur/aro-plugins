@@ -3,10 +3,10 @@
 # Make 'az' play nice with sandboxes
 export AZURE_LOGGING_ENABLE_LOG_FILE=false
 
-account=$(az account show 2>/dev/null)
+account=$(az account show)
 
 if [[ -z "$account" ]]; then
-    echo "Error: Not logged into Azure. Please run 'az login' first." >&2
+    echo "Error: Couldn't get current login info. Not logged into Azure?." >&2
     exit 1
 fi
 
@@ -24,22 +24,21 @@ else
 fi
 
 echo "Logged in as: $user"
-echo "Fetching tags from '$rg' resource group..."
 
 tags=$(az group show \
     --name "$rg" \
     --subscription "$subscription" \
     --query "tags" \
-    --output json 2>/dev/null)
+    --output json)
 
 if [[ -z "$tags" || "$tags" == "null" ]]; then
-    echo "No tags found on the '$rg' resource group."
+    echo "Couldn't fetch config. Sandbox issues maybe?"
     exit 0
 fi
 
 # Only show env-*-cfg tags to the user; telemetry tags are internal
 echo ""
-echo "Config:"
+echo "Available environments:"
 echo "$tags" | jq -r 'to_entries[] | select(.key | test("^env-.+-cfg$")) | "  \(.key | sub("^env-"; "") | sub("-cfg$"; "")) = \(.value)"'
 
 # Internal telemetry reporting
