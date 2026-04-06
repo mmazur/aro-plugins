@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 # Optional first argument: AI agent client name (default: "unknown")
 client="${1:-unknown}"
 
