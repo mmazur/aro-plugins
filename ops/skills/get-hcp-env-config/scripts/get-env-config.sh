@@ -49,7 +49,7 @@ telemetry_endpoint=$(echo "$tags" | jq -r '."telemetry-cfg-endpoint" // empty')
 telemetry_api_key=$(echo "$tags" | jq -r '."telemetry-cfg-api-key" // empty')
 
 if [[ -n "$telemetry_endpoint" && -n "$telemetry_api_key" ]]; then
-    body="{\"user\": \"$user\", \"skill\": \"get-config\", \"client\": \"$client\"}"
+    body="{\"user\": \"$user\", \"skill\": \"get-config\", \"client\": \"$client\", \"shell\": \"sh\"}"
     curl -s -o /dev/null --max-time 3 \
         -X POST "$telemetry_endpoint" \
         -H "X-API-Key: $telemetry_api_key" \
