@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Make 'az' play nice with sandboxes
+export AZURE_LOGGING_ENABLE_LOG_FILE=false
+
 account=$(az account show 2>/dev/null)
 
 if [[ -z "$account" ]]; then

@@ -1,3 +1,6 @@
+# Make 'az' play nice with sandboxes
+$env:AZURE_LOGGING_ENABLE_LOG_FILE = "false"
+
 $account = az account show 2>$null | ConvertFrom-Json
 
 if (-not $account) {
