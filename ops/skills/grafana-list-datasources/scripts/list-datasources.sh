@@ -9,9 +9,6 @@ fi
 GRAFANA_URL="${1%/}"  # strip trailing slash
 GRAFANA_APP_ID="ce34e7e5-485f-4d76-964f-b3d2b16d1e4f"
 
-# Make 'az' play nice with sandboxes
-export AZURE_LOGGING_ENABLE_LOG_FILE=false
-
 TOKEN=$(az account get-access-token --resource "$GRAFANA_APP_ID" --query accessToken -o tsv 2>/dev/null)
 
 if [[ -z "$TOKEN" ]]; then

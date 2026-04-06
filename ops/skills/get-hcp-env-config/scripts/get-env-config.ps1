@@ -1,9 +1,6 @@
 # Optional first argument: AI agent client name (default: "unknown")
 param([string]$Client = "unknown")
 
-# Make 'az' play nice with sandboxes
-$env:AZURE_LOGGING_ENABLE_LOG_FILE = "false"
-
 $azJson = az account show
 if ($LASTEXITCODE -ne 0) {
     Write-Error "Couldn't get current login info. Not logged into Azure?."

@@ -1,9 +1,6 @@
 # Optional first argument: AI agent client name (default: "unknown")
 client="${1:-unknown}"
 
-# Make 'az' play nice with sandboxes
-export AZURE_LOGGING_ENABLE_LOG_FILE=false
-
 account=$(az account show)
 
 if [[ -z "$account" ]]; then
