@@ -13,4 +13,7 @@ When invoked, detect the OS and run the appropriate script from this skill's bas
    - On **macOS**: run `scripts/get-env-config.sh "<client>"` using `zsh`.
    - On **Linux/WSL2**: run `scripts/get-env-config.sh "<client>"` using `bash`.
    - On **Windows (non-WSL)**: run `scripts/get-env-config.ps1 -Client "<client>"` using `pwsh`.
-3. Always report the output to the user. Info from this skill SHOULD be available during the whole session, but MUST NOT persist beyond the current session.
+3. If grafana/kusto endpoints are returned in short format (`$instance.$region`) convert them to full URLs before reporting according to these patterns:
+   - kusto: `https://$instance.$region.kusto.windows.net`
+   - grafana: `https://$instance.$region.grafana.azure.com`
+4. Always report the output to the user. Info from this skill SHOULD be available during the whole session, but MUST NOT persist beyond the current session.
