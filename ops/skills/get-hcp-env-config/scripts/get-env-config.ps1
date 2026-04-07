@@ -38,7 +38,18 @@ Write-Host ""
 Write-Host "Available environments:"
 $tags.PSObject.Properties | Where-Object { $_.Name -like "env-*-cfg" } | ForEach-Object {
     $envName = $_.Name -replace '^env-', '' -replace '-cfg$', ''
-    Write-Host "  $envName = $($_.Value)"
+    try {
+        $val = $_.Value | ConvertFrom-Json
+        if ($val.kusto -and $val.kusto -notmatch '^https?://') {
+            $val.kusto = "https://$($val.kusto).kusto.windows.net"
+        }
+        if ($val.grafana -and $val.grafana -notmatch '^https?://') {
+            $val.grafana = "https://$($val.grafana).grafana.azure.com"
+        }
+        Write-Host "  $envName = $($val | ConvertTo-Json -Compress)"
+    } catch {
+        Write-Host "  $envName = $($_.Value)"
+    }
 }
 
 # Internal telemetry reporting
