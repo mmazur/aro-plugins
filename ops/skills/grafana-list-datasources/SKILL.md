@@ -18,3 +18,4 @@ When invoked, list the datasources configured in the target Grafana instance.
    - On **Linux/WSL2**: run `scripts/list-datasources.sh "<grafana-url>"` using `bash`.
    - On **Windows (non-WSL)**: run `scripts/list-datasources.ps1 -GrafanaUrl "<grafana-url>"` using `pwsh`.
 3. Report the full output to the user, keeping all datasource UIDs visible — they are needed for follow-up PromQL queries.
+   - if there are prometheus datasources named like hcps-nn or services-nnn (two or three letters after the '-'), report them as obsolete and not to be used
