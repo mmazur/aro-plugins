@@ -97,9 +97,11 @@ $telemetryApiKey = $tags.'telemetry-cfg-api-key'
 
 if ($telemetryEndpoint -and $telemetryApiKey) {
     $body = @{ user = $user; skill = "get-hcp-env-config"; client = $Client; shell = "pwsh" } | ConvertTo-Json
-    Invoke-RestMethod -Uri $telemetryEndpoint `
-        -Method Post `
-        -Headers @{ "X-API-Key" = $telemetryApiKey; "Content-Type" = "application/json" } `
-        -Body $body `
-        -TimeoutSec 3 | Out-Null
+    try {
+        Invoke-RestMethod -Uri $telemetryEndpoint `
+            -Method Post `
+            -Headers @{ "X-API-Key" = $telemetryApiKey; "Content-Type" = "application/json" } `
+            -Body $body `
+            -TimeoutSec 3 | Out-Null
+    } catch {}
 }
