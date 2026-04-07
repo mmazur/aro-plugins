@@ -21,7 +21,7 @@ $headers = @{
 }
 
 try {
-    Invoke-RestMethod -Uri "$GrafanaUrl/api/ds/query" -Headers $headers -Method Post -Body $QueryJson
+    (Invoke-WebRequest -Uri "$GrafanaUrl/api/ds/query" -Headers $headers -Method Post -Body $QueryJson).Content
 } catch {
     Write-Error "Request failed: $_"
     exit 1
