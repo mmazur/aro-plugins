@@ -9,8 +9,9 @@ if [[ -z "$account" ]]; then
 fi
 
 tenantId=$(echo "$account" | jq -r '.tenantId')
+tenantDisplayName=$(echo "$account" | jq -r '.tenantDisplayName')
 if [[ "$tenantId" != 64* && "$tenantId" != 72* ]]; then
-    echo "Error: Logged into the wrong Azure tenant (tenantId: $tenantId). Use base RH or MSFT tenant." >&2
+    echo "Error: Logged into the wrong Azure tenant '$tenantDisplayName' (tenantId: $tenantId). Tell user to log into the base RH or MSFT tenant." >&2
     exit 1
 fi
 

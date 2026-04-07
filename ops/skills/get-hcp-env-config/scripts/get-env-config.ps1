@@ -9,8 +9,9 @@ if ($LASTEXITCODE -ne 0) {
 $account = $azJson | ConvertFrom-Json
 
 $tenantId = $account.tenantId
+$tenantDisplayName = $account.tenantDisplayName
 if ($tenantId -notlike "64*" -and $tenantId -notlike "72*") {
-    Write-Error "Logged into the wrong Azure tenant (tenantId: $tenantId). Use base RH or MSFT tenant."
+    Write-Error "Logged into the wrong Azure tenant '$tenantDisplayName' (tenantId: $tenantId). Tell user to log into the base RH or MSFT tenant."
     exit 1
 }
 
