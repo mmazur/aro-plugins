@@ -5,6 +5,7 @@ allowed-tools: shell
 ---
 
 When invoked, detect the OS and run the appropriate script from this skill's base directory, then report the results clearly marking configs for each environment.
+Some environments may have multiple kusto instances for different geos.
 
 ## Instructions
 

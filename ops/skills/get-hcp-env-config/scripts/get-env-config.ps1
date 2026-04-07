@@ -33,23 +33,56 @@ if (-not $tags) {
     exit 0
 }
 
-# Only show env-*-cfg tags to the user; telemetry tags are internal
+# Collect env-*-cfg* tags, group by env name, deep-merge values
+# Only show env configs to the user; telemetry tags are internal
 Write-Host ""
 Write-Host "Available environments:"
-$tags.PSObject.Properties | Where-Object { $_.Name -like "env-*-cfg" } | ForEach-Object {
-    $envName = $_.Name -replace '^env-', '' -replace '-cfg$', ''
-    try {
-        $val = $_.Value | ConvertFrom-Json
-        if ($val.kusto -and $val.kusto -notmatch '^https?://') {
-            $val.kusto = "https://$($val.kusto).kusto.windows.net"
-        }
-        if ($val.grafana -and $val.grafana -notmatch '^https?://') {
-            $val.grafana = "https://$($val.grafana).grafana.azure.com"
-        }
-        Write-Host "  $envName = $($val | ConvertTo-Json -Compress)"
-    } catch {
-        Write-Host "  $envName = $($_.Value)"
+
+$envConfigs = @{}
+$tags.PSObject.Properties | Where-Object { $_.Name -match '^env-.+-cfg' } | ForEach-Object {
+    $envName = $_.Name -replace '^env-', '' -replace '-cfg.*$', ''
+    if (-not $envConfigs.ContainsKey($envName)) {
+        $envConfigs[$envName] = @{}
     }
+    try {
+        $parsed = $_.Value | ConvertFrom-Json
+        $parsed.PSObject.Properties | ForEach-Object {
+            $propName = $_.Name
+            $propVal = $_.Value
+            $existing = $envConfigs[$envName][$propName]
+            if ($existing -is [hashtable] -and $propVal -is [PSCustomObject]) {
+                # Deep-merge object values into existing hashtable
+                $propVal.PSObject.Properties | ForEach-Object { $existing[$_.Name] = $_.Value }
+            } elseif ($propVal -is [PSCustomObject]) {
+                # Convert PSCustomObject to hashtable for consistent handling
+                $ht = @{}
+                $propVal.PSObject.Properties | ForEach-Object { $ht[$_.Name] = $_.Value }
+                $envConfigs[$envName][$propName] = $ht
+            } else {
+                $envConfigs[$envName][$propName] = $propVal
+            }
+        }
+    } catch {}
+}
+
+foreach ($envName in $envConfigs.Keys | Sort-Object) {
+    $val = $envConfigs[$envName]
+    if ($val.kusto -and $val.kusto -notmatch '^https?://') {
+        $val.kusto = "https://$($val.kusto).kusto.windows.net"
+    }
+    if ($val.grafana -and $val.grafana -notmatch '^https?://') {
+        $val.grafana = "https://$($val.grafana).grafana.azure.com"
+    }
+    if ($val.kustos -and $val.kustos -is [hashtable]) {
+        $expanded = @{}
+        foreach ($geo in $val.kustos.Keys) {
+            $ep = $val.kustos[$geo]
+            if ($ep -notmatch '^https?://') { $ep = "https://$ep.kusto.windows.net" }
+            $expanded[$geo] = $ep
+        }
+        $val.kustos = $expanded
+    }
+    Write-Host "  $envName = $($val | ConvertTo-Json -Compress)"
 }
 
 # Internal telemetry reporting

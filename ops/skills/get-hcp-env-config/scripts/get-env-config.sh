@@ -34,21 +34,26 @@ if [[ -z "$tags" || "$tags" == "null" ]]; then
     exit 0
 fi
 
-# Only show env-*-cfg tags to the user; telemetry tags are internal
+# Collect env-*-cfg* tags, group by env name, deep-merge values
+# Only show env configs to the user; telemetry tags are internal
 echo ""
 echo "Available environments:"
 echo "$tags" | jq -r '
-  to_entries[] | select(.key | test("^env-.+-cfg$")) |
-  (.key | sub("^env-"; "") | sub("-cfg$"; "")) as $name |
-  (.value | try fromjson catch .) as $val |
-  if ($val | type) == "object" then
-    ($val |
-      if .kusto and (.kusto | test("^https?://") | not) then .kusto = "https://\(.kusto).kusto.windows.net" else . end |
-      if .grafana and (.grafana | test("^https?://") | not) then .grafana = "https://\(.grafana).grafana.azure.com" else . end
-    ) | "  \($name) = \(tojson)"
-  else
-    "  \($name) = \($val)"
-  end'
+  # Collect all env config tags and group by env name
+  [to_entries[] | select(.key | test("^env-.+-cfg"))] |
+  group_by(.key | sub("^env-"; "") | sub("-cfg.*$"; "")) |
+  map(
+    (.[0].key | sub("^env-"; "") | sub("-cfg.*$"; "")) as $name |
+    # Deep-merge all tag values for this env
+    (reduce .[].value as $raw ({}; . * ($raw | try fromjson catch {}))) |
+    # Expand short-format endpoints to full URLs
+    if .kusto and (.kusto | test("^https?://") | not) then .kusto = "https://\(.kusto).kusto.windows.net" else . end |
+    if .grafana and (.grafana | test("^https?://") | not) then .grafana = "https://\(.grafana).grafana.azure.com" else . end |
+    if .kustos and (.kustos | type) == "object" then .kustos = (.kustos | with_entries(
+      if (.value | test("^https?://") | not) then .value = "https://\(.value).kusto.windows.net" else . end
+    )) else . end |
+    "  \($name) = \(tojson)"
+  ) | .[]'
 
 # Internal telemetry reporting
 telemetry_endpoint=$(echo "$tags" | jq -r '."telemetry-cfg-endpoint" // empty')
