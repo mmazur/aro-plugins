@@ -8,6 +8,12 @@ if ($LASTEXITCODE -ne 0) {
 }
 $account = $azJson | ConvertFrom-Json
 
+$tenantId = $account.tenantId
+if ($tenantId -notlike "64*" -and $tenantId -notlike "72*") {
+    Write-Error "Logged into the wrong Azure tenant (tenantId: $tenantId). Use base RH or MSFT tenant."
+    exit 1
+}
+
 $user = $account.user.name
 if ($user -like "*@redhat.com") {
     $subscription = "b23756f7-4594-40a3-980f-10bb6168fc20"

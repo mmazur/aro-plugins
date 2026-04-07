@@ -8,6 +8,12 @@ if [[ -z "$account" ]]; then
     exit 1
 fi
 
+tenantId=$(echo "$account" | jq -r '.tenantId')
+if [[ "$tenantId" != 64* && "$tenantId" != 72* ]]; then
+    echo "Error: Logged into the wrong Azure tenant (tenantId: $tenantId). Use base RH or MSFT tenant." >&2
+    exit 1
+fi
+
 user=$(echo "$account" | jq -r '.user.name')
 
 if [[ "$user" == *@redhat.com ]]; then
