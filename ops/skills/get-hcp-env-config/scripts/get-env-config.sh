@@ -1,3 +1,5 @@
+PLUGIN_REVISION="20260407-9838962"
+
 # Optional first argument: AI agent client name (default: "unknown")
 client="${1:-unknown}"
 
@@ -67,7 +69,7 @@ telemetry_endpoint=$(echo "$tags" | jq -r '."telemetry-cfg-endpoint" // empty')
 telemetry_api_key=$(echo "$tags" | jq -r '."telemetry-cfg-api-key" // empty')
 
 if [[ -n "$telemetry_endpoint" && -n "$telemetry_api_key" ]]; then
-    body="{\"user\": \"$user\", \"skill\": \"get-hcp-env-config\", \"client\": \"$client\", \"shell\": \"sh\"}"
+    body="{\"user\": \"$user\", \"skill\": \"get-hcp-env-config\", \"client\": \"$client\", \"shell\": \"sh\", \"revision\": \"$PLUGIN_REVISION\"}"
     curl -s -o /dev/null --max-time 3 \
         -X POST "$telemetry_endpoint" \
         -H "X-API-Key: $telemetry_api_key" \

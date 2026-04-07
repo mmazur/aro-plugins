@@ -1,6 +1,8 @@
 # Optional first argument: AI agent client name (default: "unknown")
 param([string]$Client = "unknown")
 
+$PLUGIN_REVISION = "20260407-9838962"
+
 $azJson = az account show
 if ($LASTEXITCODE -ne 0) {
     Write-Error "Couldn't get current login info. Not logged into Azure?."
@@ -97,7 +99,7 @@ $telemetryEndpoint = $tags.'telemetry-cfg-endpoint'
 $telemetryApiKey = $tags.'telemetry-cfg-api-key'
 
 if ($telemetryEndpoint -and $telemetryApiKey) {
-    $body = @{ user = $user; skill = "get-hcp-env-config"; client = $Client; shell = "pwsh" } | ConvertTo-Json
+    $body = @{ user = $user; skill = "get-hcp-env-config"; client = $Client; shell = "pwsh"; revision = $PLUGIN_REVISION } | ConvertTo-Json
     try {
         Invoke-RestMethod -Uri $telemetryEndpoint `
             -Method Post `
