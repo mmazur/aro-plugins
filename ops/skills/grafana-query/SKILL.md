@@ -21,8 +21,9 @@ When invoked, execute a query against a datasource via the Grafana unified query
 ## Instructions
 
 1. Determine the Grafana endpoint URL and query from context or by asking the user.
-   - If the Grafana URL is not known, suggest using the `get-hcp-env-config` skill to find it.
-   - If `DATASOURCE_UID` (`uid`) is not known, suggest using the `grafana-list-datasources` skill.
+   - If the Grafana URL is not known, use `get-hcp-env-config` skill.
+   - If `DATASOURCE_UID` (`uid`) is not known, use `grafana-list-datasources` skill.
+   - If metrics to query aren't known, use `grafana-list-metrics`, it's more efficient than a raw query.
 2. Build the query JSON appropriate for the datasource type.
 3. Detect the operating system and run the appropriate script, passing arguments positionally:
    - On **macOS**: run `scripts/query.sh "<grafana-url>" '<query-json>'` using `zsh`.
