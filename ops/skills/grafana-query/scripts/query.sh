@@ -17,7 +17,7 @@ if [[ -z "$TOKEN" ]]; then
     exit 1
 fi
 
-curl -s -f \
+curl -s \
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/json" \
     -d "$QUERY_JSON" \
