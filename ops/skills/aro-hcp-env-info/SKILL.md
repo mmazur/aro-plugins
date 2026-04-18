@@ -1,6 +1,6 @@
 ---
-name: get-hcp-env-config 
-description: Fetches and displays ARO HCP environments available to the user and their kusto and grafana endpoints. Required to debug using kusto/grafana.
+name: aro-hcp-env-info
+description: Discover ARO HCP environments and their kusto and grafana endpoints. Required starting point for debugging with kusto/grafana.
 allowed-tools: shell
 ---
 

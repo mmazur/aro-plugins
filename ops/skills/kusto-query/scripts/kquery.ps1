@@ -7,7 +7,6 @@
 
 .EXAMPLE
     .\kquery.ps1 -Cluster https://mycluster.region.kusto.windows.net -Database mydb -Kql "MyTable | take 10"
-    .\kquery.ps1 -Cluster https://mycluster.region.kusto.windows.net -Database mydb -Kql ".show tables"
 #>
 
 param(
@@ -46,7 +45,6 @@ OPTIONS:
 
 EXAMPLES:
     .\kquery.ps1 -Cluster https://mycluster.region.kusto.windows.net -Database mydb -Kql "MyTable | take 10"
-    .\kquery.ps1 -Cluster https://mycluster.region.kusto.windows.net -Database mydb -Kql ".show tables"
     .\kquery.ps1 -Cluster https://mycluster.region.kusto.windows.net -Database mydb -Kql "MyTable | summarize count() by col" -MaxRecords 0
 "@
     Write-Host $help

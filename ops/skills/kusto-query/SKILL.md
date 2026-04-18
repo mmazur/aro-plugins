@@ -12,9 +12,9 @@ allowed-tools: shell
 
 ## Instructions
 
-1. Determine the Kusto cluster URL and Database from context. If not present, use the `kusto-kluster-info` skill.
+1. Determine the Kusto cluster URL and Database from context. If not present, use the `kusto-info` skill.
 2. Prepare a KQL query.
-2. Detect the operating system and run the appropriate script, passing the URL as the first argument:
+2. Detect the operating system and run the appropriate script:
    - On **Windows (non-WSL)**: run `scripts/kquery.ps1 -Cluster CLUSTER -Database DB -Kql QUERY` using `pwsh`.
    - On other OSes -- try running the pwsh script. If pwsh not available, say python version coming soon.
 
@@ -37,6 +37,5 @@ OPTIONS:
 
 EXAMPLES:
     .\kquery.ps1 -Cluster https://mycluster.region.kusto.windows.net -Database mydb -Kql "MyTable | take 10"
-    .\kquery.ps1 -Cluster https://mycluster.region.kusto.windows.net -Database mydb -Kql ".show tables"
     .\kquery.ps1 -Cluster https://mycluster.region.kusto.windows.net -Database mydb -Kql "MyTable | summarize count() by col" -MaxRecords 0
 ```

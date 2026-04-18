@@ -8,7 +8,7 @@ When invoked, execute a query against a datasource via the Grafana unified query
 
 ## Arguments
 
-- **grafana-url** (required): The base URL of the Grafana instance (e.g. `https://my-grafana.region.grafana.azure.com`). Use the `get-hcp-env-config` skill to discover the Grafana URL for a given environment if not already known.
+- **grafana-url** (required): The base URL of the Grafana instance (e.g. `https://my-grafana.region.grafana.azure.com`). Use the `aro-hcp-env-info` skill to discover the Grafana URL for a given environment if not already known.
 - **query-json** (required): A JSON string containing the full query body to send. The structure depends on the datasource type. See example below.
 
 ## Query JSON example
@@ -21,9 +21,9 @@ When invoked, execute a query against a datasource via the Grafana unified query
 ## Instructions
 
 1. Determine the Grafana endpoint URL and query from context or by asking the user.
-   - If the Grafana URL is not known, use `get-hcp-env-config` skill.
-   - If `DATASOURCE_UID` (`uid`) is not known, use `grafana-list-datasources` skill.
-   - If metrics to query aren't known, use `grafana-list-metrics`, it's more efficient than a raw query.
+   - If the Grafana URL is not known, use `aro-hcp-env-info` skill.
+   - If `DATASOURCE_UID` (`uid`) is not known, use `grafana-info` skill to list datasources.
+   - If metrics to query aren't known, use `grafana-info` skill to list metrics — it's more efficient than a raw query.
 2. Build the query JSON appropriate for the datasource type.
 3. Detect the operating system and run the appropriate script, passing arguments positionally:
    - On **macOS**: run `scripts/query.sh "<grafana-url>" '<query-json>'` using `zsh`.
