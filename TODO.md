@@ -2,8 +2,6 @@
 
 ## Optimizations
 
-- Make everything output tight csv; json is not good
-
 ### kusto-query raw output (kquery.ps1 current format)
 
 kquery.ps1 now dumps the raw Kusto v2 streaming wire format. It contains 4 frame types:

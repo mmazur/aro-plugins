@@ -15,17 +15,8 @@ if ($LASTEXITCODE -ne 0 -or -not $token) {
 $headers = @{ "Authorization" = "Bearer $token" }
 
 try {
-    $result = Invoke-RestMethod -Uri "$GrafanaUrl/api/datasources" -Headers $headers -Method Get
+    (Invoke-WebRequest -Uri "$GrafanaUrl/api/datasources" -Headers $headers -Method Get).Content
 } catch {
     Write-Error "Request failed: $_"
     exit 1
 }
-
-if (-not $result) {
-    Write-Error "No datasources returned. Check the URL and your permissions."
-    exit 1
-}
-
-Write-Host "Grafana: $GrafanaUrl"
-Write-Host ""
-$result | Select-Object uid, type, name | Format-Table -AutoSize

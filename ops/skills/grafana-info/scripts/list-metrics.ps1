@@ -18,18 +18,8 @@ if ($LASTEXITCODE -ne 0 -or -not $token) {
 $headers = @{ "Authorization" = "Bearer $token" }
 
 try {
-    $result = Invoke-RestMethod -Uri "$GrafanaUrl/api/datasources/uid/$DatasourceUid/resources/api/v1/label/__name__/values" -Headers $headers -Method Get
+    (Invoke-WebRequest -Uri "$GrafanaUrl/api/datasources/uid/$DatasourceUid/resources/api/v1/label/__name__/values" -Headers $headers -Method Get).Content
 } catch {
     Write-Error "Request failed: $_"
     exit 1
 }
-
-if ($result.status -ne "success") {
-    Write-Error "Unexpected response from Grafana: $($result | ConvertTo-Json -Depth 5)"
-    exit 1
-}
-
-Write-Host "Datasource: $DatasourceUid"
-Write-Host "Metric count: $($result.data.Count)"
-Write-Host ""
-$result.data | ForEach-Object { Write-Host $_ }

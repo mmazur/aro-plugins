@@ -17,18 +17,5 @@ if [[ -z "$TOKEN" ]]; then
     exit 1
 fi
 
-result=$(curl -s -f -H "Authorization: Bearer $TOKEN" \
-    "$GRAFANA_URL/api/datasources/uid/$DATASOURCE_UID/resources/api/v1/label/__name__/values")
-
-status=$(echo "$result" | jq -r '.status // empty')
-if [[ "$status" != "success" ]]; then
-    echo "Error: unexpected response from Grafana:" >&2
-    echo "$result" >&2
-    exit 1
-fi
-
-count=$(echo "$result" | jq '.data | length')
-echo "Datasource: $DATASOURCE_UID"
-echo "Metric count: $count"
-echo ""
-echo "$result" | jq -r '.data[]'
+curl -s -f -H "Authorization: Bearer $TOKEN" \
+    "$GRAFANA_URL/api/datasources/uid/$DATASOURCE_UID/resources/api/v1/label/__name__/values"

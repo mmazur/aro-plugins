@@ -16,13 +16,4 @@ if [[ -z "$TOKEN" ]]; then
     exit 1
 fi
 
-result=$(curl -s -f -H "Authorization: Bearer $TOKEN" "$GRAFANA_URL/api/datasources")
-
-if [[ -z "$result" || "$result" == "null" ]]; then
-    echo "No datasources returned. Check the URL and your permissions." >&2
-    exit 1
-fi
-
-echo "Grafana: $GRAFANA_URL"
-echo ""
-{ echo $'uid\ttype\tname'; echo $'---\t----\t----'; echo "$result" | jq -r '.[] | "\(.uid)\t\(.type)\t\(.name)"'; } | column -t -s $'\t'
+curl -s -f -H "Authorization: Bearer $TOKEN" "$GRAFANA_URL/api/datasources"
