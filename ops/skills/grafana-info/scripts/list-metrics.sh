@@ -1,13 +1,32 @@
+#!/usr/bin/env bash
 set -euo pipefail
 
-if [[ $# -lt 2 || -z "$1" || -z "$2" ]]; then
-    echo "Usage: $0 <grafana-url> <datasource-uid>" >&2
-    echo "Example: $0 https://my-grafana.region.grafana.azure.com my-prom-uid" >&2
+usage() {
+    cat >&2 <<'EOF'
+Usage: list-metrics.sh -GrafanaUrl <url> -DatasourceUid <uid>
+Example: list-metrics.sh -GrafanaUrl https://my-grafana.region.grafana.azure.com -DatasourceUid my-prom-uid
+EOF
     exit 1
+}
+
+GRAFANA_URL=""
+DATASOURCE_UID=""
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -GrafanaUrl)    GRAFANA_URL="${2%/}"; shift 2 ;;
+        -DatasourceUid) DATASOURCE_UID="$2";  shift 2 ;;
+        *) echo "Unknown argument: $1" >&2; usage ;;
+    esac
+done
+
+if [[ -z "$GRAFANA_URL" ]]; then
+    echo "Error: -GrafanaUrl is required" >&2; usage
+fi
+if [[ -z "$DATASOURCE_UID" ]]; then
+    echo "Error: -DatasourceUid is required" >&2; usage
 fi
 
-GRAFANA_URL="${1%/}"
-DATASOURCE_UID="$2"
 GRAFANA_APP_ID="ce34e7e5-485f-4d76-964f-b3d2b16d1e4f"
 
 TOKEN=$(az account get-access-token --resource "$GRAFANA_APP_ID" --query accessToken -o tsv 2>/dev/null)

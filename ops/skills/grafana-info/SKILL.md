@@ -22,8 +22,8 @@ Use this to discover datasource UIDs needed for queries.
 
 1. Determine the Grafana endpoint URL from context or by asking the user.
 2. Detect the operating system and run the appropriate script:
-   - On **macOS**: run `scripts/list-datasources.sh "<grafana-url>"` using `zsh`.
-   - On **Linux/WSL2**: run `scripts/list-datasources.sh "<grafana-url>"` using `bash`.
+   - On **macOS**: run `scripts/list-datasources.sh -GrafanaUrl "<grafana-url>"` using `zsh`.
+   - On **Linux/WSL2**: run `scripts/list-datasources.sh -GrafanaUrl "<grafana-url>"` using `bash`.
    - On **Windows (non-WSL)**: run `scripts/list-datasources.ps1 -GrafanaUrl "<grafana-url>"` using `pwsh`.
 3. Report the full output to the user, keeping all datasource UIDs visible — they are needed for follow-up queries.
    - If there are prometheus datasources named like hcps-nn or services-nnn (two or three letters after the '-'), report them as obsolete and not to be used.
@@ -35,7 +35,7 @@ Use this to discover what metrics exist for a datasource before building queries
 1. Determine the Grafana endpoint URL and datasource UID from context or by asking the user.
    - If the datasource UID is not known, list datasources first (see above).
 2. Detect the operating system and run the appropriate script:
-   - On **macOS**: run `scripts/list-metrics.sh "<grafana-url>" "<datasource-uid>"` using `zsh`.
-   - On **Linux/WSL2**: run `scripts/list-metrics.sh "<grafana-url>" "<datasource-uid>"` using `bash`.
+   - On **macOS**: run `scripts/list-metrics.sh -GrafanaUrl "<grafana-url>" -DatasourceUid "<datasource-uid>"` using `zsh`.
+   - On **Linux/WSL2**: run `scripts/list-metrics.sh -GrafanaUrl "<grafana-url>" -DatasourceUid "<datasource-uid>"` using `bash`.
    - On **Windows (non-WSL)**: run `scripts/list-metrics.ps1 -GrafanaUrl "<grafana-url>" -DatasourceUid "<datasource-uid>"` using `pwsh`.
 3. Report the full output to the user. If the list is very large, summarize or let the user know the total count and offer to filter.
