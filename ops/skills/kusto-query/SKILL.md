@@ -15,8 +15,9 @@ allowed-tools: shell
 1. Determine the Kusto cluster URL and Database from context. If not present, use the `kusto-info` skill.
 2. Prepare a KQL query.
 2. Detect the operating system and run the appropriate script:
+   - On **macOS**: run `scripts/kquery.sh -Cluster CLUSTER -Database DB -Kql QUERY` using `zsh`.
+   - On **Linux/WSL2**: run `scripts/kquery.sh -Cluster CLUSTER -Database DB -Kql QUERY` using `bash`.
    - On **Windows (non-WSL)**: run `scripts/kquery.ps1 -Cluster CLUSTER -Database DB -Kql QUERY` using `pwsh`.
-   - On other OSes -- try running the pwsh script. If pwsh not available, say python version coming soon.
 
 ### Output
 
@@ -25,10 +26,10 @@ The raw JSON response from the Kusto REST API is returned as-is. If the result s
 ## Reference
 
 ```
-kquery.ps1 — Run arbitrary KQL queries against Kusto
+kquery (.ps1 and .sh) — Run arbitrary KQL queries against Kusto
 
 USAGE:
-    kquery.ps1 -Cluster <url> -Database <name> -Kql <kql_string> [options]
+    kquery -Cluster <url> -Database <name> -Kql <kql_string> [options]
 
 REQUIRED:
     -Cluster <url>              Kusto cluster URL
@@ -40,6 +41,6 @@ OPTIONS:
     -MaxRecords <int>           Row limit (default: 1000, 0 = unlimited)
 
 EXAMPLES:
-    .\kquery.ps1 -Cluster https://mycluster.region.kusto.windows.net -Database mydb -Kql "MyTable | take 10"
-    .\kquery.ps1 -Cluster https://mycluster.region.kusto.windows.net -Database mydb -Kql "MyTable | summarize count() by col" -MaxRecords 0
+    .\kquery -Cluster https://mycluster.region.kusto.windows.net -Database mydb -Kql "MyTable | take 10"
+    .\kquery -Cluster https://mycluster.region.kusto.windows.net -Database mydb -Kql "MyTable | summarize count() by col" -MaxRecords 0
 ```
