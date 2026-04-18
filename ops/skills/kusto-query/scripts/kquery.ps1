@@ -107,55 +107,11 @@ if ($isControlCommand) {
 }
 
 try {
-    $response = Invoke-RestMethod -Uri $uri -Method Post -Headers $headers -Body $body
+    $response = Invoke-WebRequest -Uri $uri -Method Post -Headers $headers -Body $body -UseBasicParsing
 }
 catch {
     Write-Error "Kusto query failed: $_"
     exit 1
 }
 
-# --- Parse response ---
-
-$results = @()
-
-if ($isControlCommand) {
-    # v1 response: single object with Tables array
-    foreach ($table in $response.Tables) {
-        $columns = $table.Columns | ForEach-Object { $_.ColumnName }
-        foreach ($row in $table.Rows) {
-            $obj = [ordered]@{}
-            for ($i = 0; $i -lt $columns.Count; $i++) {
-                $obj[$columns[$i]] = $row[$i]
-            }
-            $results += [PSCustomObject]$obj
-        }
-    }
-} else {
-    # v2 response: array of frames, find PrimaryResult DataTable frame(s)
-    foreach ($frame in $response) {
-        if ($frame.FrameType -eq "DataTable" -and $frame.TableKind -eq "PrimaryResult") {
-            $columns = $frame.Columns | ForEach-Object { $_.ColumnName }
-            foreach ($row in $frame.Rows) {
-                # Skip truncation error rows injected by Kusto
-                $isError = $false
-                foreach ($cell in $row) {
-                    if ($cell -is [System.Management.Automation.PSCustomObject] -and $null -ne $cell.OneApiErrors) {
-                        $isError = $true
-                        break
-                    }
-                }
-                if ($isError) { continue }
-
-                $obj = [ordered]@{}
-                for ($i = 0; $i -lt $columns.Count; $i++) {
-                    $obj[$columns[$i]] = $row[$i]
-                }
-                $results += [PSCustomObject]$obj
-            }
-        }
-    }
-}
-
-# --- Output as JSON ---
-
-$results | ConvertTo-Json -Depth 10
+Write-Output $response.Content

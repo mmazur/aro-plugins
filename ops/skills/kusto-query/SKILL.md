@@ -18,6 +18,10 @@ allowed-tools: shell
    - On **Windows (non-WSL)**: run `scripts/kquery.ps1 -Cluster CLUSTER -Database DB -Kql QUERY` using `pwsh`.
    - On other OSes -- try running the pwsh script. If pwsh not available, say python version coming soon.
 
+### Output
+
+The raw JSON response from the Kusto REST API is returned as-is. If the result set is truncated due to `-MaxRecords` being hit, the response will contain an additional row entry with a `OneApiErrors` field indicating truncation.
+
 ## Reference
 
 ```
