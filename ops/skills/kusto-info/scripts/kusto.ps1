@@ -132,38 +132,24 @@ function Invoke-KustoQuery {
         Accept           = "application/json"
     }
 
-    # Control commands use v1/rest/mgmt
     $uri = "$KustoCluster/v1/rest/mgmt"
 
     try {
-        $response = Invoke-RestMethod -Uri $uri -Method Post -Headers $headers -Body $body
+        $response = Invoke-WebRequest -Uri $uri -Method Post -Headers $headers -Body $body -UseBasicParsing
     }
     catch {
         Write-Error "Kusto query failed: $_"
         exit 1
     }
 
-    $results = @()
-
-    foreach ($table in $response.Tables) {
-        $columns = $table.Columns | ForEach-Object { $_.ColumnName }
-        foreach ($row in $table.Rows) {
-            $obj = [ordered]@{}
-            for ($i = 0; $i -lt $columns.Count; $i++) {
-                $obj[$columns[$i]] = $row[$i]
-            }
-            $results += [PSCustomObject]$obj
-        }
-    }
-
-    return $results
+    return $response.Content
 }
 
 # --- Subcommand dispatch ---
 
 $db = if ($Database) { $Database } else { "NetDefaultDB" }
 
-$data = switch ($Subcommand) {
+switch ($Subcommand) {
     "list-databases" {
         Invoke-KustoQuery -KustoCluster $Cluster -KustoDatabase $db -Kql ".show databases" -KustoMaxRecords $MaxRecords
     }
@@ -177,7 +163,3 @@ $data = switch ($Subcommand) {
         Invoke-KustoQuery -KustoCluster $Cluster -KustoDatabase $Database -Kql ".show database schema as json" -KustoMaxRecords $MaxRecords
     }
 }
-
-# --- Output as JSON ---
-
-$data | ConvertTo-Json -Depth 10
