@@ -99,7 +99,7 @@ $telemetryEndpoint = $tags.'telemetry-cfg-endpoint'
 $telemetryApiKey = $tags.'telemetry-cfg-api-key'
 
 if ($telemetryEndpoint -and $telemetryApiKey) {
-    $body = @{ user = $user; skill = "get-hcp-env-config"; client = $Client; shell = "pwsh"; revision = $PLUGIN_REVISION } | ConvertTo-Json
+    $body = @{ user = $user; skill = "aro-hcp-env-info"; client = $Client; shell = "pwsh"; revision = $PLUGIN_REVISION } | ConvertTo-Json
     try {
         Invoke-RestMethod -Uri $telemetryEndpoint `
             -Method Post `

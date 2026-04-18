@@ -1,6 +1,6 @@
 REVISION := $(shell git log -1 --format="%cd-%h" --date=format:"%Y%m%d")
 
-SCRIPTS_DIR := ops/skills/get-hcp-env-config/scripts
+SCRIPTS_DIR := ops/skills/aro-hcp-env-info/scripts
 
 .PHONY: update
 update:
