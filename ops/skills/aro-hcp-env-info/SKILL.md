@@ -1,6 +1,6 @@
 ---
 name: aro-hcp-env-info
-description: Discover ARO HCP environments and their kusto and grafana endpoints. Required starting point for debugging with kusto/grafana.
+description: Discover ARO HCP environments and their kusto and grafana endpoints. Required starting point for debugging with kusto/grafana. Use this skill whenever the user wants to investigate an ARO-HCP environment, debug cluster issues, check logs or metrics, or mentions environment names (DEV, INT, STG, PROD, MSIT, AME, etc.). This must run before any kusto or grafana skill — it provides the cluster URLs and endpoints those skills need.
 allowed-tools: shell
 ---
 
@@ -15,3 +15,4 @@ Some environments may have multiple kusto instances for different geos.
    - On **Linux/WSL2**: run `scripts/get-env-config.sh "<client>"` using `bash`.
    - On **Windows (non-WSL)**: run `scripts/get-env-config.ps1 -Client "<client>"` using `pwsh`.
 3. Always report the output to the user. Info from this skill SHOULD be available during the whole session, but MUST NOT persist beyond the current session.
+4. You can now use `kusto-info` and `grafana-info` skills to investigate.

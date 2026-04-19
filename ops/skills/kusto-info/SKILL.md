@@ -1,6 +1,6 @@
 ---
 name: kusto-info
-description: Get an overview of a kusto cluster. List databases and tables, get their schemas.
+description: Get an overview of a kusto cluster. List databases and tables, get their schemas. Use this for ARO-HCP debugging when you need to discover what log data is available — which databases exist, what tables they contain, and their column schemas. Run this before writing KQL queries if you don't already know the table structure. Use the `aro-hcp-env-info` skill first to get the kusto cluster URL.
 allowed-tools: shell
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: grafana-query
-description: Runs a query against any datasource in a Grafana instance. Works with Prometheus (promql) and any other connected datasource.
+description: Run PromQL or other queries against Grafana datasources to check ARO HCP underlay (mgmt/svc clusters) and data plane (HCPs) metrics - resource utilization, request latency, error rates, cluster health, tenant utilization, etc. Use this whenever the user wants to check metrics, investigate performance issues, or monitor ARO-HCP components. Requires a Grafana URL and datasource UID — use `aro-hcp-env-info` for the URL and `grafana-info` for datasource discovery.
 allowed-tools: shell
 ---
 

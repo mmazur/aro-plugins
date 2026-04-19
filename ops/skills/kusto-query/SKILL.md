@@ -1,6 +1,6 @@
 ---
 name: kusto-query
-description: Run KQL queries against kusto clusters.
+description: Run KQL queries against ARO-HCP kusto clusters to search logs, investigate errors, and debug issues. Use this whenever the user wants to check ARO HCP underlay (mgmt/svc clusters) and data plane (HCPs) provisioning logs, find error messages, investigate cluster lifecycle events, query resource status, or analyze operational data. Requires a cluster URL and database name — use `aro-hcp-env-info` to get the cluster URL and `kusto-info` to explore available tables if needed.
 allowed-tools: shell
 ---
 

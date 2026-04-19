@@ -1,6 +1,6 @@
 ---
 name: grafana-info
-description: Discover datasources and available metrics in a Grafana instance. Use this before building queries with the `grafana-query` skill.
+description: Discover datasources and available Prometheus (and other) metrics in an ARO-HCP Grafana instance. Use this when the user wants to know what metrics are being collected, find the right datasource UID, or explore available metric names before querying. Run this before `grafana-query` — it provides the datasource UIDs and metric names that queries require. Use `aro-hcp-env-info` first to get the Grafana URL.
 allowed-tools: shell
 ---
 
