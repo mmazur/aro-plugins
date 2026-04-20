@@ -10,6 +10,14 @@ AI Agent Plugins for ARO HCP dev / ops
 
 ## Functionality
 
+### As of 2026-04-20
+
+- Grafana and kusto fully working across all OSes (if not, it's a bug)
+- Drastically improved skill discoverability with verbose descriptions
+- Still todo:
+  - fine-tune desc further with proper evals
+  - minor tweaks here and there
+
 ### As of 2026-04-07
 
 - Can fetch grafana and kusto enpoints
