@@ -1,4 +1,4 @@
-PLUGIN_REVISION="20260419-94fde16"
+PLUGIN_REVISION="20260420-9cb1ef8"
 
 # Optional first argument: AI agent client name (default: "unknown")
 client="${1:-unknown}"
