@@ -15,8 +15,13 @@ if ($LASTEXITCODE -ne 0 -or -not $token) {
 $headers = @{ "Authorization" = "Bearer $token" }
 
 try {
-    (Invoke-WebRequest -Uri "$GrafanaUrl/api/datasources" -Headers $headers -Method Get).Content
+    $response = Invoke-WebRequest -Uri "$GrafanaUrl/api/datasources" -Headers $headers -Method Get -SkipHttpErrorCheck
 } catch {
     Write-Error "Request failed: $_"
     exit 1
 }
+if ($response.StatusCode -ge 400) {
+    Write-Error "Request failed (HTTP $($response.StatusCode)): $($response.Content)"
+    exit 1
+}
+$response.Content

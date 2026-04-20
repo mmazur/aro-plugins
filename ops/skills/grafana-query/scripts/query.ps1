@@ -21,8 +21,13 @@ $headers = @{
 }
 
 try {
-    (Invoke-WebRequest -Uri "$GrafanaUrl/api/ds/query" -Headers $headers -Method Post -Body $QueryJson).Content
+    $response = Invoke-WebRequest -Uri "$GrafanaUrl/api/ds/query" -Headers $headers -Method Post -Body $QueryJson -SkipHttpErrorCheck
 } catch {
     Write-Error "Request failed: $_"
     exit 1
 }
+if ($response.StatusCode -ge 400) {
+    Write-Error "Request failed (HTTP $($response.StatusCode)): $($response.Content)"
+    exit 1
+}
+$response.Content

@@ -80,7 +80,7 @@ kusto_query() {
     local body
     body=$(jq -n --arg db "$db" --arg kql "$kql" --argjson max "$MAX_RECORDS" \
         '{db: $db, csl: $kql, properties: {Options: {truncationmaxrecords: $max}}}')
-    curl -s \
+    curl -sS --fail-with-body \
         -H "Authorization: Bearer $TOKEN" \
         -H "Content-Type: application/json" \
         -d "$body" \

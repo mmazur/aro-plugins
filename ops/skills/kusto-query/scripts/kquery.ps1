@@ -107,10 +107,14 @@ if ($isControlCommand) {
 }
 
 try {
-    $response = Invoke-WebRequest -Uri $uri -Method Post -Headers $headers -Body $body -UseBasicParsing
+    $response = Invoke-WebRequest -Uri $uri -Method Post -Headers $headers -Body $body -UseBasicParsing -SkipHttpErrorCheck
 }
 catch {
     Write-Error "Kusto query failed: $_"
+    exit 1
+}
+if ($response.StatusCode -ge 400) {
+    Write-Error "Kusto query failed (HTTP $($response.StatusCode)): $($response.Content)"
     exit 1
 }
 

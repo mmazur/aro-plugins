@@ -31,4 +31,4 @@ if [[ -z "$TOKEN" ]]; then
     exit 1
 fi
 
-curl -s -f -H "Authorization: Bearer $TOKEN" "$GRAFANA_URL/api/datasources"
+curl -sS --fail-with-body -H "Authorization: Bearer $TOKEN" "$GRAFANA_URL/api/datasources"

@@ -60,7 +60,7 @@ else
     URI="$CLUSTER/v2/rest/query"
 fi
 
-curl -s \
+curl -sS --fail-with-body \
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/json" \
     -d "$BODY" \
