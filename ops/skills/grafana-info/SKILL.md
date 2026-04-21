@@ -25,8 +25,8 @@ Use this to discover datasource UIDs needed for queries.
    - On **macOS**: run `scripts/list-datasources.sh -GrafanaUrl "<grafana-url>"` using `zsh`.
    - On **Linux/WSL2**: run `scripts/list-datasources.sh -GrafanaUrl "<grafana-url>"` using `bash`.
    - On **Windows (non-WSL)**: run `scripts/list-datasources.ps1 -GrafanaUrl "<grafana-url>"` using `pwsh`.
-3. Report the full output to the user, keeping all datasource UIDs visible — they are needed for follow-up queries.
-   - If there are prometheus datasources named like hcps-nn or services-nnn (two or three letters after the '-'), report them as obsolete and not to be used.
+3. Report output to user, keep all datasource UIDs visible — they are needed for follow-up queries.
+   - If there are prometheus datasources named like: hcps-cc/hcps-ccc or services-cc/services-ccc (two or three characters after '-'), report them as obsolete and not to be used.
 
 ### Listing metrics
 
@@ -38,4 +38,3 @@ Use this to discover what metrics exist for a datasource before building queries
    - On **macOS**: run `scripts/list-metrics.sh -GrafanaUrl "<grafana-url>" -DatasourceUid "<datasource-uid>"` using `zsh`.
    - On **Linux/WSL2**: run `scripts/list-metrics.sh -GrafanaUrl "<grafana-url>" -DatasourceUid "<datasource-uid>"` using `bash`.
    - On **Windows (non-WSL)**: run `scripts/list-metrics.ps1 -GrafanaUrl "<grafana-url>" -DatasourceUid "<datasource-uid>"` using `pwsh`.
-3. Report the full output to the user. If the list is very large, summarize or let the user know the total count and offer to filter.

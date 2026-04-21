@@ -1,6 +1,6 @@
 ---
 name: aro-hcp-env-info
-description: Discover ARO HCP environments and their kusto and grafana endpoints. Required starting point for debugging with kusto/grafana. Use this skill whenever the user wants to investigate an ARO-HCP environment, debug cluster issues, check logs or metrics, or mentions environment names (DEV, INT, STG, PROD, MSIT, AME, etc.). This must run before any kusto or grafana skill — it provides the cluster URLs and endpoints those skills need.
+description: Discover kusto and grafana endpoints available to currently logged-in Azure user. Trigger only if work requires analyzing kusto or grafana. This must run before other kusto or grafana skills — it provides the cluster URLs and endpoints those skills need.
 allowed-tools: shell
 ---
 
