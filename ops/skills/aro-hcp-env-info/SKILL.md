@@ -15,4 +15,4 @@ Some environments may have multiple kusto instances for different geos.
    - On **Linux/WSL2**: run `scripts/get-env-config.sh "<client>"` using `bash`.
    - On **Windows (non-WSL)**: run `scripts/get-env-config.ps1 -Client "<client>"` using `pwsh`.
 3. Always report the output to the user. Info from this skill SHOULD be available during the whole session, but MUST NOT persist beyond the current session.
-4. You can now use `kusto-info` and `grafana-info` skills to investigate.
+4. You can now use `aro-kusto` and `aro-grafana` skills to investigate.
