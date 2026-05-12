@@ -1,3 +1,6 @@
+⚠️ **Moved to https://github.com/openshift-online/aro-ai-tools** ⚠️
+
+
 # aro-plugins
 AI Agent Plugins for ARO HCP dev / ops
 
